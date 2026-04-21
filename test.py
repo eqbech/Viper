@@ -11,7 +11,7 @@ async def main():
     package: PyPiPackage = await client.get("requests")
     print(f"fetched a single package: {package.name}")
 
-    _ = await client.get_many(urls[:10000])
+    _ = await client.get_many(urls[:1000])
 
 
 if __name__ == "__main__":

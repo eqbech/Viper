@@ -215,8 +215,8 @@ mod viper {
                     let (level, color) = match record.level() {
                         log::Level::Error => ("ERROR", "\x1b[31m"), // red
                         log::Level::Warn => ("WARN", "\x1b[33m"),   // yellow
-                        log::Level::Info => ("INFO", "\x1b[32m"),   // green
-                        log::Level::Debug => ("DEBUG", "\x1b[36m"), // cyan
+                        log::Level::Info => ("INFO", "\x1b[36m"),   // cyan
+                        log::Level::Debug => ("DEBUG", "\x1b[32m"), // green
                         log::Level::Trace => ("TRACE", "\x1b[35m"), // magenta
                     };
 
