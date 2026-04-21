@@ -51,61 +51,6 @@ async def main():
 asyncio.run(main())
 ```
 
-## API Reference
-
-### `PyPiClient`
-
-Main client for fetching packages from PyPI.
-
-#### Methods
-
-##### `__init__()`
-Creates a new PyPI client instance. Initializes the logger and internal HTTP client.
-
-##### `get(package: str) -> Coroutine[PyPiPackage]`
-Fetch metadata for a single package.
-
-**Parameters:**
-- `package` (str): The name of the package to fetch
-
-**Returns:** Coroutine that resolves to a `PyPiPackage` object
-
-**Example:**
-```python
-package = await client.get("requests")
-print(package.name)  # "requests"
-```
-
-##### `get_many(packages: List[str], max_concurrency: Optional[int] = None) -> Coroutine[List[PyPiPackage]]`
-Fetch metadata for multiple packages concurrently.
-
-**Parameters:**
-- `packages` (List[str]): List of package names to fetch
-- `max_concurrency` (Optional[int]): Maximum number of concurrent requests (default: 250)
-
-**Returns:** Coroutine that resolves to a list of successfully fetched `PyPiPackage` objects
-
-**Example:**
-```python
-results = await client.get_many(package_list, max_concurrency=100)
-for pkg in results:
-    print(pkg.name)
-```
-
-### `PyPiPackage`
-
-Represents a PyPI package with its metadata.
-
-**Attributes:**
-- `name` (str): The name of the package
-
-## Performance Considerations
-
-- **Default Concurrency**: Set to 250 concurrent requests by default
-- **No PyPI Rate Limiting**: PyPI appears to have no strict rate limiting, but concurrency is capped to avoid overwhelming your system
-- **Memory Usage**: The entire JSON response is loaded into memory before parsing. For future improvements, streaming parsing could be implemented
-- **Data Payload**: The endpoint returns more data than necessary. Fetching only essential metadata might be more efficient
-
 ## Building from Source
 
 ### Prerequisites
@@ -145,15 +90,6 @@ Represents a PyPI package with its metadata.
 - `serde-query` - Type-safe JSON querying
 - `indicatif` - Progress bars
 - `log` / `env_logger` - Logging
-
-### Python Dependencies
-- `pandas` (2.0.3+)
-
-## Limitations
-
-- Only fetches basic package metadata (name and releases)
-- Full JSON response is loaded into memory
-- No fine-grained error handling (failed packages are returned in a list but without specific error reasons)
 
 ## Testing
 
