@@ -118,7 +118,7 @@ mod viper {
 
                 let handles = packages
                     .into_iter()
-                    .map(|p| {
+                    .map(|package| {
                         let (semaphore_clone, sc, fc, pbc, cc) = (
                             semaphore.clone(),
                             successful_packages.clone(),
@@ -128,15 +128,18 @@ mod viper {
                         );
                         tokio::spawn(async move {
                             let _permit = semaphore_clone.acquire().await.unwrap();
-                            match request_package(cc, &p).await {
+                            match request_package(cc, &package).await {
                                 Ok(pkg) => sc.lock().await.push(pkg),
-                                Err(_) => fc.lock().await.push(p),
+                                Err(_) => fc.lock().await.push(package),
                             }
                             drop(_permit);
+
                             let pb = pbc.lock().await;
                             pb.inc(1);
+
                             let pos = pb.position();
                             let len = pb.length().unwrap_or(0);
+
                             pb.set_message(format!(
                                 "[{}/{}] fetching packages...",
                                 format_download(pos),
